@@ -1,0 +1,40 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header{
+    background-color:#2d839f ;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+}
+
+header ul{
+    list-style: none;
+    display: flex;
+}
+
+header li{
+    margin-left: 10px;
+}
+
+.logo{
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+
+a{
+    text-decoration: none;
+    color: white;
+    padding: 8px 20px;
+}
+
+body{
+background-color: #3c9ebe;
+}
