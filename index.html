@@ -20,7 +20,7 @@
         </nav>
     </header>
 
-    <main>
+    <div class="container"> <!--form para capturar dados-->
         <h1>Registrar despesa</h1>
         <form id="captura-dados">
             <div class="form-group">
@@ -34,17 +34,39 @@
             </div>
 
             <div class="form-group">
-                <label for="data-despesa" id="data-despesa" required >Data</label>
+                <label for="data-despesa" required >Data</label>
                 <input type="date" id="data-despesa">
             </div>
 
             <div class="form-group">
-                <label for="categoria-despesa">Selecione a categoria</label>
-                <select id="select-despesa">...</select>
+                <label for="select-despesa">Selecione a categoria</label>
+                <select id="select-despesa">
+                    <option value="">Selecione...</option>
+                    <option value="Alimentação">Alimentação</option>
+                    <option value="Transporte">Transporte</option>
+                    <option value="Moradia">Moradia</option>
+                    <option value="Lazer">Lazer</option>
+                    <option value="Saúde">Saúde</option>
+                    <option value="Outros">Outros</option>
+                </select>
             </div>
 
             <button type="submit"> Adicionar despesa</button>
         </form>
-    </main>
+    </div> <!--fim do menu para colocar os dados-->
+
+    <div id="lista-despesa-container"> <!--div onde vai listar todas as despesas-->
+        <h2>Despesas salvas</h2>
+
+        <div id="total-despesa">
+            <h3>Valor total: <span id="total-valor">R$ 0,00</span></h3>
+        </div>
+
+        <!--lista com todas as dividas-->
+        
+        <div id="lista-despesa"></div>
+    </div>
+
+    <script src="/scripts/script.js"></script>
 </body>
 </html>

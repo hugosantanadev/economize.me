@@ -38,3 +38,20 @@ a{
 body{
 background-color: #3c9ebe;
 }
+
+.form-group{
+    padding: 5px;
+   
+}
+
+.container{
+   margin: auto;
+}
+
+button{
+    border-radius: 10px;
+    padding: 10px;
+    margin: auto;
+    color: white;
+    background-color: aqua;
+}
