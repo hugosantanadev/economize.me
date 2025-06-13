@@ -1,66 +1,90 @@
-document.addEventListener('DOMContentLoaded', () =>{
-    //pegas as infos do html
+// Aguarda o HTML ser completamente carregado para executar o script
+document.addEventListener('DOMContentLoaded', () => {
 
-    const form = document.getElementById('captura-dados')
-    const despesaNome = document.getElementById('nome-despesa')
-    const despesaTotal = document.getElementById('total-despesa')
-    const despesaData = document.getElementById('data-despesa')
-    const despesaCategoria = document.getElementById('select-despesa')
+    // --- 1. SELEÇÃO DOS ELEMENTOS DO HTML ---
+    // Seleciona os elementos do formulário e da lista que vamos manipular.
+    const form = document.getElementById('captura-dados');
+    const despesaNomeInput = document.getElementById('nome-despesa');
+    const despesaValorInput = document.getElementById('valor-despesa'); // Seleciona o campo do valor
+    const despesaDataInput = document.getElementById('data-despesa');
+    const despesaCategoriaInput = document.getElementById('select-despesa');
+    const despesaListaDiv = document.getElementById('lista-despesa');
+    const valorTotalSpan = document.getElementById('total-valor');
 
-    const despesaLista = document.getElementById('lista-despesa')
-    const valorTotal = document.getElementById('total-valor')
+    // --- 2. FUNÇÃO PARA EXIBIR AS DESPESAS NA TELA ---
+    const mostrarDespesas = () => {
+        // Pega o array de despesas do localStorage. Se não existir, cria um array vazio [].
+        // A chave 'despesas' precisa estar entre aspas.
+        const despesas = JSON.parse(localStorage.getItem('despesas')) || [];
 
-    //função pra carregar e salvar tudo
-     const mostrarDespesas = () =>{
+        // Limpa a lista atual para não exibir itens duplicados.
+        despesaListaDiv.innerHTML = '';
 
-        const despesas = JSON.parse(localStorage.getItem(despesas)) || []
+        // Inicia a variável que vai somar os valores.
+        let totalValor = 0;
 
-         despesaLista.innerHTML = ''
+        // Itera sobre cada objeto 'despesa' dentro do array 'despesas'.
+        despesas.forEach(despesa => {
+            // Cria um novo elemento <div> para cada despesa.
+            const despesaItem = document.createElement('div');
+            // Adiciona uma classe para que possamos estilizar no futuro, se quisermos.
+            despesaItem.className = 'despesa-item';
 
-         let totalValor = 0
+            // Formata a data para o padrão brasileiro (dd/mm/aaaa).
+            const formattedDate = new Date(despesa.data + 'T00:00:00').toLocaleDateString('pt-BR');
 
-         despesas.forEach(despesas => {
-             const despesaItem =document.createElement('div')
-             despesaItem.className('despesa-item')
-
-             const formattedDate = new Date(expense.date + 'T00:00:00').toLocaleDateString('pt-BR')
-
-             despesaItem.innerHTML = `
-                <span><strong>${despesaNome}</strong></span>
-                <span>R$ ${parseFloat(despesaTotal).toFixed(2).replace('.', ',')}</span>
+            // Preenche o HTML do item com as informações corretas do objeto 'despesa'.
+            despesaItem.innerHTML = `
+                <span><strong>${despesa.nome}</strong></span>
+                <span>R$ ${parseFloat(despesa.valor).toFixed(2).replace('.', ',')}</span>
                 <span>${formattedDate}</span>
-                <span class="categorias">${expense.category}</span>`
+                <span class="categoria">${despesa.categoria}</span>
+            `;
 
-             despesaLista.appendChild(despesaItem)
+            // Adiciona o novo item à lista na tela.
+            despesaListaDiv.appendChild(despesaItem);
 
-             totalValor += parseFloat(valorTotal)
-         })
-         valorTotal.textContent = `R$ ${totalAmount.toFixed(2).replace('.', ',')}`
+            // Soma o valor da despesa atual ao total.
+            totalValor += parseFloat(despesa.valor);
+        });
 
-     }
+        // Atualiza o texto do valor total na tela com a soma formatada.
+        valorTotalSpan.textContent = `R$ ${totalValor.toFixed(2).replace('.', ',')}`;
+    };
 
-     form.addEventListener('submit', (event) => {
-         const novaDespesa ={
-             id: Date.now(),
-             nome: despesaNome.value,
-             valor: despesaTotal.value,
-             data: despesaData.value,
-             categoria : despesaCategoria.value
-         }
+    // --- 3. EVENTO DE ENVIO DO FORMULÁRIO ---
+    form.addEventListener('submit', (event) => {
+        // Impede que a página recarregue ao enviar o formulário.
+        event.preventDefault();
 
-         const despesas =JSON.parse(localStorage.getItem('despesas')) || []
+        // Cria um novo objeto com os valores dos campos do formulário.
+        const novaDespesa = {
+            id: Date.now(), // ID único baseado na data/hora atual.
+            nome: despesaNomeInput.value,
+            valor: despesaValorInput.value,
+            data: despesaDataInput.value,
+            categoria: despesaCategoriaInput.value
+        };
 
-         despesas.push(novaDespesa)
+        // Pega o array de despesas que já está salvo.
+        const despesas = JSON.parse(localStorage.getItem('despesas')) || [];
 
-         localStorage.setItem('despesas',  JSON.stringify(despesas))
+        // Adiciona a nova despesa ao array.
+        despesas.push(novaDespesa);
 
-         form.reset()
+        // Salva o array atualizado de volta no localStorage.
+        localStorage.setItem('despesas', JSON.stringify(despesas));
 
-         despesaNome.focus()
+        // Limpa os campos do formulário.
+        form.reset();
+        // Coloca o cursor de volta no primeiro campo para facilitar.
+        despesaNomeInput.focus();
 
-         mostrarDespesas()
-     })
+        // Chama a função para atualizar a lista na tela.
+        mostrarDespesas();
+    });
 
-    mostrarDespesas()
-
-}
+    // --- 4. CARGA INICIAL ---
+    // Chama a função uma vez quando a página é carregada para mostrar as despesas salvas.
+    mostrarDespesas();
+});
